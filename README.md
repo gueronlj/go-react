@@ -18,4 +18,4 @@ This will start http server at http://localhost:8080
         "name": "test1"
     }
 
-2) New >  websocket request >  ws://localhost:8080/chat/joinRoom/<room id>?userId=<user id>>&username=<username>
+2) New >  websocket request >  ws://localhost:8080/chat/joinRoom/1?userId=69&username=nice
