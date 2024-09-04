@@ -1,13 +1,13 @@
 # go-react
 Realtime chat v2 (golang and react)
 
-##Setup
+## Setup
 1) go mod tidy
 2) go run ./server/cmd/main.go
 
 This will start http server at http://localhost:8080
 
-##Testing the backend
+## Testing the backend
 
 *Chat room and user objects are currently only stored in server's memory. Therefore,  ALWAYS CREATE A ROOM FIRST.
 
