@@ -17,7 +17,8 @@ func main() {
 
 	r.POST("/chat/createRoom", wsHandler.CreateRoom)
 	r.GET("/chat/joinRoom/:roomId", wsHandler.JoinRoom)
-	//TODO: getRooms route
+	r.GET("/chat/getRooms/", wsHandler.GetRooms)
+	r.GET("/chat/getClients/:roomId", wsHandler.GetClients)
 
 	r.Run("localhost:8080")
 }

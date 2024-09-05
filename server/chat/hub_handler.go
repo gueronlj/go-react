@@ -84,5 +84,50 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 	go cli.writeMessage()
 
 	cli.readMessage(h.hub)
+}
 
+// we will need to return json
+type RoomResponse struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+func (h *Handler) GetRooms(c *gin.Context) {
+	rooms := make([]RoomResponse, 0)
+
+	for _, room := range h.hub.Rooms {
+		rooms = append(rooms, RoomResponse{
+			ID:   room.ID,
+			Name: room.Name,
+		})
+	}
+
+	c.JSON(http.StatusOK, rooms)
+}
+
+type ClientResponse struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+}
+
+// get all clients from a room by ID
+func (h *Handler) GetClients(c *gin.Context) {
+	var clients []ClientResponse
+
+	roomId := c.Param("roomId")
+
+	if _, ok := h.hub.Rooms[roomId]; !ok {
+		//if not ok (roomId is not in rooms) then create and return an empty slice, size 0
+		clients = make([]ClientResponse, 0)
+		c.JSON(http.StatusOK, clients)
+	}
+
+	for _, client := range h.hub.Rooms[roomId].Clients {
+		clients = append(clients, ClientResponse{
+			ID:       client.ID,
+			Username: client.Username,
+		})
+	}
+
+	c.JSON(http.StatusOK, clients)
 }
