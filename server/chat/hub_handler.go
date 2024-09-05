@@ -43,8 +43,10 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
 		//while not testing
-		// origin := r.Header.Get("Origin")
-		// return origin == "http://localhost:3000"
+		//origin := r.Header.Get("Origin")
+		//return origin == "http://localhost:5173"
+
+		//whilke testing
 		return true
 	},
 }
@@ -75,10 +77,10 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 		Username: username,
 	}
 
-	//push a client through the join channel
+	//push the client through the join channel
 	h.hub.Join <- cli
 
-	//push a message through message channel
+	//push the message through message channel
 	h.hub.Broadcast <- msg
 
 	go cli.writeMessage()
