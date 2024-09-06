@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CreateRoom from './components/CreateRoom'
 import RoomList from './components/RoomList'
 
@@ -26,19 +26,19 @@ function App() {
       console.log(err.message); 
     } 
   }
+
+  useEffect(() =>
+    fetchRooms
+ ,[])
  
   return (
-    <div>
+    <>
       <CreateRoom/>
-
-      <button onClick={fetchRooms}>View Rooms</button>
-
       <RoomList
         data={roomList}
         userId={user.id}
         username={user.name}/>
-      
-    </div>
+    </>
   )
 }
 

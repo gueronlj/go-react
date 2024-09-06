@@ -1,11 +1,18 @@
 import { useState } from "react"
 
 const CreateRoom = () => {
-    const [input] = useState({
+    const [input, setInput] = useState({
         ID: "7",
         Name: "wooah"
-
     })
+
+    const handleInput = (event) => {
+        let id = new Date().toISOString()
+        setInput({
+            ID: id,
+            Name: event.target.value
+        })
+    }
 
     const handleCreate = () => {
         fetch("http://localhost:8080/chat/createRoom",{
@@ -16,10 +23,15 @@ const CreateRoom = () => {
             body: JSON.stringify(input),
         })
     }
-    
+
     return(
         <div>
-            <button onClick={handleCreate}>Create Room</button>
+            <form>
+                <label name="room">Room Name: </label>
+                <input name = "room" onChange={handleInput}/>
+
+                <button onClick={handleCreate}>Create Room</button>
+            </form> 
         </div>
     )
 }
