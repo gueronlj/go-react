@@ -1,13 +1,19 @@
 import './App.css'
 import { useState } from 'react'
+import CreateRoom from './components/CreateRoom'
+import RoomList from './components/RoomList'
 
 function App() {
   const [roomList, setRoomList] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [user] = useState(
+    {
+      id: 1,
+      name: "sonesky"
+    }
+  )
 
   const fetchRooms = async () => {
     try{
-      setLoading(true)
       let response = await fetch('http://localhost:8080/chat/getRooms/', {
         method: 'GET',
       })
@@ -17,26 +23,21 @@ function App() {
         setRoomList(data);
       }
     } catch ( err ){
-      console.log(err.message);  
-    } finally {
-      setLoading(false)
-    }
+      console.log(err.message); 
+    } 
   }
  
   return (
-    <div> 
+    <div>
+      <CreateRoom/>
+
       <button onClick={fetchRooms}>View Rooms</button>
+
+      <RoomList
+        data={roomList}
+        userId={user.id}
+        username={user.name}/>
       
-      { loading ? <h3>Fetching rooms...</h3>
-        :
-        <ul>
-          { roomList.map((room)=>
-            <li key={room.id}>
-              {room.name}
-            </li>
-          )}
-        </ul>
-      }
     </div>
   )
 }
