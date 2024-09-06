@@ -2,6 +2,7 @@
 Realtime chat v2 (golang and react)
 
 ## To Do
+- display messages
 - stop hardcoding user in client
 - store users and rooms in db?
 
@@ -12,9 +13,13 @@ Realtime chat v2 (golang and react)
 
 This will start http server at http://localhost:8080
 
-## Client Setup
-1) npm install
-2) npm run dev
+## Client Setup`
+ ```
+ npm install
+ ```
+ ```
+ npm run dev
+ ```
 
 This will run on http://localhost:5173/
 
@@ -23,12 +28,12 @@ This will run on http://localhost:5173/
 *Chat room and user objects are currently only stored in server's memory. Therefore,  ALWAYS CREATE A ROOM FIRST.
 
 ### Create a room
-- POST to http://localhost:8080/chat/createRoom
-
-    Body: {
-        "ID": "1",
-        "name": "test1"
-    }
-
+POST to http://localhost:8080/chat/createRoom
+```
+Body: {
+    "ID": "1",
+    "name": "test1"
+}
+```
 ### Websockets in Postman
-- New >  websocket request >  ws://localhost:8080/chat/joinRoom/1?userId=69&username=nice
+New >  websocket request >  ws://localhost:8080/chat/joinRoom/1?userId=69&username=nice
