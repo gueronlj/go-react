@@ -1,7 +1,10 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import CreateRoom from './components/CreateRoom'
+import ChatRoom  from './components/Room'
 import RoomList from './components/RoomList'
+import WebSocketProvider from './components/WebSocketProvider/webSocketProvider'
+import { Route, Link } from 'wouter'
 
 function App() {
   const [roomList, setRoomList] = useState([])
@@ -34,12 +37,21 @@ function App() {
   return (
     <>
       <CreateRoom/>
-      <RoomList
-        data={roomList}
-        userId={user.id}
-        username={user.name}/>
+      <WebSocketProvider>
+        <Link href="/rooms">Lobby</Link>
+        <Route path="/rooms">
+          <RoomList
+            data={roomList}
+            userId={user.id}
+            username={user.name}/>
+        </Route> 
+        
+        <Route path="/chatroom">
+          <ChatRoom/>
+        </Route> 
+      </WebSocketProvider>
     </>
   )
 }
 
-export default App
+export default App 

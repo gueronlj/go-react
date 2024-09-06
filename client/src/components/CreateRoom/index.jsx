@@ -14,14 +14,20 @@ const CreateRoom = () => {
         })
     }
 
-    const handleCreate = () => {
-        fetch("http://localhost:8080/chat/createRoom",{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                },
-            body: JSON.stringify(input),
-        })
+    const handleCreate = async () => {
+        try{
+            let res = await fetch("http://localhost:8080/chat/createRoom",{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+                body: JSON.stringify(input),
+            })
+            console.log(res);
+             
+        } catch (err){
+            console.log(err);  
+        }  
     }
 
     return(

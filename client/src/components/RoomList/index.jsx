@@ -1,25 +1,34 @@
 /* eslint-disable react/prop-types */
-
 import Card from "./Card";
+import { WEBSOCKET_URL } from "../../configs";
+import { useContext } from "react";
+import { WebSocketContext } from "../WebSocketProvider/webSocketProvider";
+import { Link } from "wouter";
 
 const RoomList  = ({data, userId, username}) => {
+    const {setConnection} = useContext(WebSocketContext)
 
     const handleJoinRoom = (roomId, userId, username) => {
-        const url = `ws://localhost:8080/chat/joinRoom/${roomId}?userId=${userId}&username=${username}`
-        console.log(`joining room at ${url}`);
+        const ws = new WebSocket(`${WEBSOCKET_URL}/chat/joinRoom/${roomId}?userId=${userId}&username=${username}`)
+
+        if (ws.OPEN){
+            setConnection(ws)
+            console.log(`joining room at ${ws.url}`);
+            return
+        }
     }
 
     return(
         <>
             { data.map((room)=>
-                <Card
-                    key={room.id}
-                    room={room}
-                    onClick={()=>handleJoinRoom(room.id, userId, username)}>
-                    
-                    <button>Join</button>
+                <Card key={room.id} room={room}>
+                    <Link 
+                        href="/chatroom"
+                        onClick={() => handleJoinRoom(room.id, userId, username)}
+                    >
+                        Join
+                    </Link>
                 </Card>
-                
             )}
         </>
     )
