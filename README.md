@@ -6,20 +6,19 @@ Realtime chat v2 (golang and react)
 - stop hardcoding user in client
 - store users and rooms in db?
 
-
 ## Server Setup
-1) go mod tidy
-2) go run ./server/cmd/main.go
+```
+go mod tidy
+go run ./server/cmd/main.go
+```
 
 This will start http server at http://localhost:8080
 
-## Client Setup`
- ```
- npm install
- ```
- ```
- npm run dev
- ```
+## Client Setup
+```
+npm install
+npm run dev
+```
 
 This will run on http://localhost:5173/
 
