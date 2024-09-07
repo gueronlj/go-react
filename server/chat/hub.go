@@ -47,6 +47,7 @@ func (h *Hub) Run() {
 							Content:  fmt.Sprintf("%v left the chat", cl.Username),
 							RoomID:   cl.RoomID,
 							Username: cl.Username,
+							UserId:   cl.ID,
 						}
 					}
 					//delete client ID from the room in the client's map

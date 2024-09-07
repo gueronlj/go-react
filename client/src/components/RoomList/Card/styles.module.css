@@ -1,6 +1,21 @@
 .card{
-    border: 1px solid;
     border-radius: 10px;
+    background-color: rgb(88, 104, 133);
     margin: 1em;
+    padding: .5em;
+    width: 200px;
 }
+
+h2{
+    color: rgb(255, 255, 255);
+}
+
+a:visited{
+    color:aliceblue;
+}
+
+a{
+    color:aliceblue
+}
+
 

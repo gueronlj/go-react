@@ -1,7 +1,7 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import CreateRoom from './components/CreateRoom'
-import ChatRoom  from './components/Room'
+import ChatRoom  from './components/ChatRoom'
 import RoomList from './components/RoomList'
 import WebSocketProvider from './components/WebSocketProvider/webSocketProvider'
 import { Route, Link } from 'wouter'
@@ -9,8 +9,8 @@ import { Route, Link } from 'wouter'
 function App() {
   const [roomList, setRoomList] = useState([])
   const [user] = useState(
-    {
-      id: 1,
+    { 
+      id: "1",
       name: "sonesky"
     }
   )
@@ -36,10 +36,9 @@ function App() {
  
   return (
     <>
-      <CreateRoom/>
       <WebSocketProvider>
-        <Link href="/rooms">Lobby</Link>
-        <Route path="/rooms">
+        <Route path="/">
+          <CreateRoom/>
           <RoomList
             data={roomList}
             userId={user.id}
@@ -47,7 +46,9 @@ function App() {
         </Route> 
         
         <Route path="/chatroom">
-          <ChatRoom/>
+          <ChatRoom
+            user={user}/>
+          <Link href="/">Back</Link>
         </Route> 
       </WebSocketProvider>
     </>
