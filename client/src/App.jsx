@@ -41,13 +41,12 @@ function App() {
         <Route path="/">
         <div className='main'>
           <SidePanel>
-            <CreateRoom/>
+            <CreateRoom user={user}/>
           </SidePanel>
           <div className='lobby'>
               <RoomList
                 data={roomList}
-                userId={user.id}
-                username={user.name}/>
+                user={user}/>
             </div>
         </div>
         </Route> 

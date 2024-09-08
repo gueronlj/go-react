@@ -2,10 +2,7 @@ import { useState } from "react"
 import styles from './styles.module.css'
 
 const CreateRoom = () => {
-    const [input, setInput] = useState({
-        ID: "7",
-        Name: "wooah"
-    })
+    const [input, setInput] = useState()
 
     const handleInput = (event) => {
         let id = new Date().toISOString()
@@ -25,7 +22,6 @@ const CreateRoom = () => {
                 body: JSON.stringify(input),
             })
             console.log(res);
-             
         } catch (err){
             console.log(err);  
         }  

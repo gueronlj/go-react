@@ -13,7 +13,6 @@ const ChatRoom = ({user}) => {
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
 
-
     const sendMessage = () => {  
         if ( connection == null ) {
             console.log("ChatRoom - Failed to send, no connection");
@@ -40,7 +39,7 @@ const ChatRoom = ({user}) => {
     }
 
     useEffect (() => {
-        connection && getUsers()
+       connection && getUsers()
     },[])
 
     useEffect (() => {
@@ -56,7 +55,9 @@ const ChatRoom = ({user}) => {
             const msg = JSON.parse(message.data)
             if (msg.content == 'A new user has joined'){
                 //decunstruct previous users state and insert new user
-                setUsers([...users, { username: msg.username, id: msg.userId }])
+                if(users?.length>0){
+                    setUsers([...users, { username: msg.username, id: msg.userId }])
+                }    
             }
             if (msg.content === `{${msg.username} left the chat`){
                 //find matching username and remove from user list
