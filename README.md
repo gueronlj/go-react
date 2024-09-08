@@ -2,15 +2,15 @@
 Realtime chat v2 (golang and react)
 
 ## To Do
+- limit room name length
+- stop hardcoding user in client
+- store users and rooms in db?
 
-# Fix
+### Fix
 ```
 index.jsx:59 Uncaught TypeError: users is not iterable
 ```
 -we need to join the room on creation or put atleast ourself/1 user into users state
-
-- stop hardcoding user in client
-- store users and rooms in db?
 
 ## Server Setup
 ```
