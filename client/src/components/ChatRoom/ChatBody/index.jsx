@@ -9,7 +9,7 @@ const ChatBody = ({data}) => {
                 <div key={index} className={styles.message}>
                     <div className={styles.sender+" "+(msg.type=='self'&&styles.selfSender)}>{msg.username}</div>
                     <div className={styles.messageContent+" "+(msg.type=='self'&&styles.self)}>
-                        {msg.content}
+                        <p>{msg.content}</p>
                     </div>
                 </div>
             )}

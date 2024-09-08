@@ -77,15 +77,20 @@ const ChatRoom = ({user}) => {
     },[messages, connection, users, user.name])
 
     return (
-        <div className='chatRoom'>
-            <h2>Room ID: {messages[0]?.roomId}</h2>
+        <div className={styles.chatRoom}>
+            <div className={styles.header}><h2>Room ID: {messages[0]?.roomId}</h2></div>
+            
             <ChatBody
                 data={messages}/> 
-            <div className={styles.userInput}>
-            <textarea
-                ref={textarea}/>
-            <button onClick={sendMessage}>Send</button>
-            </div>
+
+             <div className={styles.footer}>
+                <div className={styles.userInput}>
+                    <textarea
+                        ref={textarea}/>
+                    <button onClick={sendMessage}>Send</button>
+                </div>
+            </div>   
+            
         </div>
     )
 }
