@@ -6,10 +6,11 @@ import RoomList from './components/RoomList'
 import WebSocketProvider from './components/WebSocketProvider/webSocketProvider'
 import { Route } from 'wouter'
 import SidePanel from './components/SidePanel/sidepanel'
+import AliasSelect from './components/AliasSelect/aliasselect'
 
 function App() {
   const [roomList, setRoomList] = useState([])
-  const [user] = useState(
+  const [user, setUser] = useState(
     { 
       id: "1",
       name: "sonesky"
@@ -41,7 +42,11 @@ function App() {
         <Route path="/">
         <div className='main'>
           <SidePanel>
-            <CreateRoom user={user}/>
+            <AliasSelect 
+              user={user}
+              setUser={setUser}/>
+            <CreateRoom 
+              user={user}/>
           </SidePanel>
           <div className='lobby'>
               <RoomList

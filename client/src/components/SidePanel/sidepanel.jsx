@@ -5,8 +5,6 @@ const SidePanel = ({children}) => {
     return(
         <div className={styles.sidePanel}>
             {children}
-            <div>Option 2</div>
-            <div>Option 3</div>
         </div>
     )
 }
