@@ -12,6 +12,7 @@ const ChatRoom = ({user}) => {
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
 
+
     const sendMessage = () => {  
         if ( connection == null ) {
             console.log("ChatRoom - Failed to send, no connection");
@@ -78,11 +79,15 @@ const ChatRoom = ({user}) => {
 
     return (
         <div className={styles.chatRoom}>
-            <div className={styles.header}><h2>Room ID: {messages[0]?.roomId}</h2></div>
+            <div className={styles.header}>
+                <h3>Room ID: {messages[0]?.roomId}</h3>
+            </div>
             
-            <ChatBody
-                data={messages}/> 
-
+            <div className={styles.content}>
+                <ChatBody
+                    data={messages}/>
+            </div>
+            
              <div className={styles.footer}>
                 <div className={styles.userInput}>
                     <textarea

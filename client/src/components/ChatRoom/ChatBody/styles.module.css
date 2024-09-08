@@ -1,3 +1,4 @@
+
 .message{
     display: flex;
     flex-direction: column;
@@ -33,11 +34,3 @@
     color: whitesmoke;
 }
 
-.chatBody{
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding: 2em;
-    justify-content: flex-end;
-}
-   

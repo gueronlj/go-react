@@ -1,8 +1,18 @@
 /* eslint-disable react/prop-types */
-
+import { useRef, useEffect } from 'react';
 import styles from './styles.module.css'
 
 const ChatBody = ({data}) => {
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect (() => {
+        scrollToBottom();
+    },[data])
+
     return (
         <div className={styles.chatBody}>
             {data?.map((msg, index) => 
@@ -13,6 +23,7 @@ const ChatBody = ({data}) => {
                     </div>
                 </div>
             )}
+            <div ref={messagesEndRef}/> 
         </div>
     )
 }
