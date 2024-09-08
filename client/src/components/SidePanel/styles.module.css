@@ -1,0 +1,15 @@
+.sidePanel{
+    background-color: rgb(77, 97, 124);
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    height: 100%;
+    justify-content: flex-start;
+    padding-top: 3em;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.sidePanel > * {
+    margin: 1em;
+}

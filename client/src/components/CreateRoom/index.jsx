@@ -1,4 +1,5 @@
 import { useState } from "react"
+import styles from './styles.module.css'
 
 const CreateRoom = () => {
     const [input, setInput] = useState({
@@ -31,7 +32,7 @@ const CreateRoom = () => {
     }
 
     return(
-        <div>
+        <div className={styles.sideMenuForm}>
             <form>
                 <label name="room">Room Name: </label>
                 <input name = "room" onChange={handleInput}/>

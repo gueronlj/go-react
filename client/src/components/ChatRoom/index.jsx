@@ -4,6 +4,7 @@ import ChatBody from "./ChatBody"
 import { WebSocketContext } from '../WebSocketProvider/webSocketProvider'
 import autosize from 'autosize'
 import styles from './styles.module.css'
+import { Link } from 'wouter'
 
 const ChatRoom = ({user}) => {
 
@@ -81,6 +82,7 @@ const ChatRoom = ({user}) => {
         <div className={styles.chatRoom}>
             <div className={styles.header}>
                 <h3>Room ID: {messages[0]?.roomId}</h3>
+                <Link href="/">Back</Link>
             </div>
             
             <div className={styles.content}>

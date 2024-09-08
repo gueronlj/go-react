@@ -4,7 +4,8 @@ import CreateRoom from './components/CreateRoom'
 import ChatRoom  from './components/ChatRoom'
 import RoomList from './components/RoomList'
 import WebSocketProvider from './components/WebSocketProvider/webSocketProvider'
-import { Route, Link } from 'wouter'
+import { Route } from 'wouter'
+import SidePanel from './components/SidePanel/sidepanel'
 
 function App() {
   const [roomList, setRoomList] = useState([])
@@ -38,17 +39,22 @@ function App() {
     <>
       <WebSocketProvider>
         <Route path="/">
-          <CreateRoom/>
-          <RoomList
-            data={roomList}
-            userId={user.id}
-            username={user.name}/>
+        <div className='main'>
+          <SidePanel>
+            <CreateRoom/>
+          </SidePanel>
+          <div className='lobby'>
+              <RoomList
+                data={roomList}
+                userId={user.id}
+                username={user.name}/>
+            </div>
+        </div>
         </Route> 
         
         <Route path="/chatroom">
           <ChatRoom
             user={user}/>
-          <Link href="/">Back</Link>
         </Route> 
       </WebSocketProvider>
     </>
