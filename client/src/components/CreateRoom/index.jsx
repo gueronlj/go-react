@@ -32,7 +32,6 @@ const CreateRoom = () => {
             <form>
                 <label name="room">Room Name: </label>
                 <input name = "room" onChange={handleInput}/>
-
                 <button onClick={handleCreate}>Create Room</button>
             </form> 
         </div>

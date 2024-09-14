@@ -7,15 +7,10 @@ import WebSocketProvider from './components/WebSocketProvider/webSocketProvider'
 import { Route } from 'wouter'
 import SidePanel from './components/SidePanel/sidepanel'
 import AliasSelect from './components/AliasSelect/aliasselect'
+import UserProvider from './components/UserProvider/UserProvider'
 
 function App() {
   const [roomList, setRoomList] = useState([])
-  const [user, setUser] = useState(
-    { 
-      id: "1",
-      name: "sonesky"
-    }
-  )
 
   const fetchRooms = async () => {
     try{
@@ -39,27 +34,24 @@ function App() {
   return (
     <>
       <WebSocketProvider>
-        <Route path="/">
-        <div className='main'>
-          <SidePanel>
-            <AliasSelect 
-              user={user}
-              setUser={setUser}/>
-            <CreateRoom 
-              user={user}/>
-          </SidePanel>
-          <div className='lobby'>
-              <RoomList
-                data={roomList}
-                user={user}/>
+        <UserProvider>
+          <Route path="/">
+            <div className='main'>
+              <SidePanel>
+                  <AliasSelect />
+                  <CreateRoom />
+                </SidePanel>
+              <div className='lobby'>
+                  <RoomList
+                    data={roomList}/>
+              </div>
             </div>
-        </div>
-        </Route> 
-        
-        <Route path="/chatroom">
-          <ChatRoom
-            user={user}/>
-        </Route> 
+          </Route> 
+          
+          <Route path="/chatroom">
+            <ChatRoom/>
+          </Route>
+        </UserProvider>
       </WebSocketProvider>
     </>
   )

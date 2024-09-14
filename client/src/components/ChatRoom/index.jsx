@@ -5,11 +5,13 @@ import { WebSocketContext } from '../WebSocketProvider/webSocketProvider'
 import autosize from 'autosize'
 import styles from './styles.module.css'
 import { Link } from 'wouter'
+import { UserContext } from '../UserProvider/UserProvider'
 
-const ChatRoom = ({user}) => {
+const ChatRoom = () => {
 
     const [ messages, setMessages ] = useState([])
     const [ users, setUsers ] = useState ([])
+    const { user } = useContext(UserContext)
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
 
@@ -39,6 +41,8 @@ const ChatRoom = ({user}) => {
     }
 
     useEffect (() => {
+        console.log(user?.name);
+        
        connection && getUsers()
     },[])
 
@@ -77,7 +81,7 @@ const ChatRoom = ({user}) => {
         }
         connection.onerror = (error) => { console.log("ChatRoom - connection error: " + error)}
         connection.onopen = () => { console.log('ChatRoom - connection open')}
-    },[messages, connection, users, user.name])
+    },[messages, connection, users, user?.name])
 
     return (
         <div className={styles.chatRoom}>
