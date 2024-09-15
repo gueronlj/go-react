@@ -3,16 +3,12 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    border-radius: 7px;
+    border-radius: 3px;
     background-color: rgb(88, 104, 133);
     margin: 1em;
     width: 200px;
     max-height: 80px;
 }   
-
-h2{
-    color: rgb(255, 255, 255);
-}
 
 a:visited{
     color:aliceblue;

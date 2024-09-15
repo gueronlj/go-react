@@ -12,7 +12,6 @@ const RoomList  = ({data}) => {
 
     const handleJoinRoom = (roomId) => {
         const ws = new WebSocket(`${WEBSOCKET_URL}/chat/joinRoom/${roomId}?userId=${user.id}&username=${user.name}`)
-
         if (ws.OPEN) {
             setConnection(ws)
             console.log(`joining room at ${ws.url}`);

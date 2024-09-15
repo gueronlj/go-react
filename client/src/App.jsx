@@ -29,28 +29,30 @@ function App() {
 
   useEffect(() =>
     fetchRooms
- ,[])
- 
+  ,[])
+  
   return (
     <>
       <WebSocketProvider>
         <UserProvider>
+
           <Route path="/">
             <div className='main'>
               <SidePanel>
-                  <AliasSelect />
-                  <CreateRoom />
-                </SidePanel>
+                <AliasSelect />
+                <CreateRoom />
+              </SidePanel>
               <div className='lobby'>
-                  <RoomList
-                    data={roomList}/>
+                <RoomList
+                  data={roomList}/>
               </div>
             </div>
           </Route> 
-          
+
           <Route path="/chatroom">
             <ChatRoom/>
           </Route>
+
         </UserProvider>
       </WebSocketProvider>
     </>

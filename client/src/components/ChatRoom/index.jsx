@@ -12,6 +12,7 @@ const ChatRoom = () => {
     const [ messages, setMessages ] = useState([])
     const [ users, setUsers ] = useState ([])
     const { user } = useContext(UserContext)
+    const [userCount, setUserCount] = useState(0)
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
 
@@ -34,17 +35,16 @@ const ChatRoom = () => {
             })
             const data = await res.json()
             console.log("Users in chat: "+JSON.stringify(data));
-            setUsers(data)           
+            setUsers(data)
+            setUserCount(data.length)           
         } catch(err) {
             console.log(err);  
         }
     }
 
     useEffect (() => {
-        console.log(user?.name);
-        
-       connection && getUsers()
-    },[])
+        connection && getUsers()
+    },[messages])
 
     useEffect (() => {
         //Handle ws connection stuff
@@ -87,6 +87,7 @@ const ChatRoom = () => {
         <div className={styles.chatRoom}>
             <div className={styles.header}>
                 <h3>Room ID: {messages[0]?.roomId}</h3>
+                <p>Users in chat: {userCount}</p>
                 <Link href="/">Back</Link>
             </div>
             

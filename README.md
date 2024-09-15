@@ -2,15 +2,9 @@
 Realtime chat v2 (golang and react)
 
 ## To Do
-- limit room name length
-- stop hardcoding user in client
-- store users and rooms in db?
-
-### Fix
-```
-index.jsx:59 Uncaught TypeError: users is not iterable
-```
--we need to join the room on creation or put atleast ourself/1 user into users state
+- display number of users in a room
+- randomly generate short Id for rooms
+- store users and rooms/messages in db
 
 ## Server Setup
 ```
@@ -23,7 +17,7 @@ This will start http server at http://localhost:8080
 ## Client Setup
 ```
 npm install
-npm run dev
+npm start
 ```
 
 This will run on http://localhost:5173/
@@ -41,4 +35,4 @@ Body: {
 }
 ```
 ### Websockets in Postman
-New >  websocket request >  ws://localhost:8080/chat/joinRoom/1?userId=69&username=nice
+New request >  websocket request >  ws://localhost:8080/chat/joinRoom/1?userId=69&username=nice
