@@ -25,7 +25,6 @@ func (c *Client) writeMessage() {
 	defer func() {
 		c.Connection.Close()
 	}()
-
 	for {
 		message, ok := <-c.Message
 		if !ok {
@@ -40,7 +39,6 @@ func (c *Client) readMessage(hub *Hub) {
 		hub.Leave <- c
 		c.Connection.Close()
 	}()
-
 	for {
 		_, m, err := c.Connection.ReadMessage()
 		if err != nil {
@@ -50,14 +48,13 @@ func (c *Client) readMessage(hub *Hub) {
 			}
 			break
 		}
-
+		//send mesg through Hub's broadcast channel
 		msg := &Message{
 			Content:  string(m),
 			RoomID:   c.RoomID,
 			Username: c.Username,
 			UserId:   c.ID,
 		}
-
 		hub.Broadcast <- msg
 	}
 }

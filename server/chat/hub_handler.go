@@ -24,12 +24,10 @@ type CreateRoomReq struct {
 
 func (h *Handler) CreateRoom(c *gin.Context) {
 	var req CreateRoomReq
-
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	h.hub.Rooms[req.ID] = &Room{
 		ID:      req.ID,
 		Name:    req.Name,
@@ -52,17 +50,15 @@ var upgrader = websocket.Upgrader{
 }
 
 func (h *Handler) JoinRoom(c *gin.Context) {
+	//when a client joins a room, ugrade to websocket connection
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	roomID := c.Param("roomId")
 	cleintID := c.Query("userId")
 	username := c.Query("username")
-
 	cli := &Client{
 		Connection: conn,
 		Message:    make(chan *Message, 10),
@@ -70,21 +66,17 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 		RoomID:     roomID,
 		Username:   username,
 	}
-
 	msg := &Message{
 		Content:  "A new user has joined",
 		RoomID:   roomID,
 		Username: username,
 	}
-
 	//push the client through the join channel
 	h.hub.Join <- cli
-
-	//push the message through message channel
+	//push the on join message through message channel
 	h.hub.Broadcast <- msg
-
+	//start the reading and writing listeners
 	go cli.writeMessage()
-
 	cli.readMessage(h.hub)
 }
 
@@ -96,7 +88,6 @@ type RoomResponse struct {
 
 func (h *Handler) GetRooms(c *gin.Context) {
 	rooms := make([]RoomResponse, 0)
-
 	for _, room := range h.hub.Rooms {
 		rooms = append(rooms, RoomResponse{
 			ID:   room.ID,
@@ -115,21 +106,17 @@ type ClientResponse struct {
 // get all clients from a room by ID
 func (h *Handler) GetClients(c *gin.Context) {
 	var clients []ClientResponse
-
 	roomId := c.Param("roomId")
-
 	if _, ok := h.hub.Rooms[roomId]; !ok {
 		//if not ok (roomId is not in rooms) then create and return an empty slice, size 0
 		clients = make([]ClientResponse, 0)
 		c.JSON(http.StatusOK, clients)
 	}
-
 	for _, client := range h.hub.Rooms[roomId].Clients {
 		clients = append(clients, ClientResponse{
 			ID:       client.ID,
 			Username: client.Username,
 		})
 	}
-
 	c.JSON(http.StatusOK, clients)
 }
