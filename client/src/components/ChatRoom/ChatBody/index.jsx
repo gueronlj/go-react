@@ -14,16 +14,6 @@ const ChatBody = ({ data }) => {
         setMessages(data);
     }, [data]);
 
-    // useEffect(() => {
-    //     socket.on('receive_message', (newMessage) => {
-    //         setMessages((prevMessages) => [...prevMessages, newMessage]);
-    //     });
-
-    //     return () => {
-    //         socket.off('receive_message');
-    //     };
-    // }, [socket]);
-
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
