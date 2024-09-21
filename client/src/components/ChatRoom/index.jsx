@@ -89,6 +89,7 @@ const ChatRoom = () => {
                 <h3>Room ID: {messages[0]?.roomId}</h3>
                 <p>Users in chat: {userCount}</p>
                 <Link href="/">Back</Link>
+                <button onClick={() => {connection.close()}}>Leave Room</button>
             </div>
             
             <div className={styles.content}>

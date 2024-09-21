@@ -4,11 +4,15 @@
     justify-content: space-evenly;
     align-items: center;
     border-radius: 3px;
-    background-color: rgb(88, 104, 133);
+    background-color: #23417b;
     margin: 1em;
     width: 200px;
     max-height: 80px;
 }   
+
+h3{
+    color: rgb(255, 255, 255);
+}
 
 a:visited{
     color:aliceblue;

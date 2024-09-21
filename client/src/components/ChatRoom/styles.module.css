@@ -33,10 +33,19 @@ textarea{
     background-color: rgb(96, 107, 107);
     position: fixed;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .header h3 {
     margin: 0;
+}
+
+.header > *{
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 .content{
