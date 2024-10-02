@@ -4,8 +4,8 @@ import ChatBody from "./ChatBody"
 import { WebSocketContext } from '../WebSocketProvider/webSocketProvider'
 import autosize from 'autosize'
 import styles from './styles.module.css'
-import { Link } from 'wouter'
 import { UserContext } from '../UserProvider/UserProvider'
+import { useLocation } from 'wouter'
 
 const ChatRoom = () => {
 
@@ -16,6 +16,7 @@ const ChatRoom = () => {
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
     const [typingUsers, setTypingUsers] = useState([])
+    const [, setLocation] = useLocation()
 
     const sendMessage = () => {  
         if ( connection == null ) {
@@ -56,6 +57,13 @@ const ChatRoom = () => {
             return
             
         }
+    }
+
+    const handleLeaveBtn = () => {
+        if (connection) {
+            connection.close()
+        }
+        setLocation('/')
     }
 
     useEffect(() => {
@@ -107,8 +115,7 @@ const ChatRoom = () => {
             <div className={styles.header}>
                 <h3>Room ID: {messages[0]?.roomId}</h3>
                 <p>Users in chat: {userCount}</p>
-                <Link href="/">Back</Link>
-                <button onClick={() => {connection.close()}}>Leave Room</button>
+                <button onClick={handleLeaveBtn}>Back</button>
             </div>
             
             <div className={styles.content}>

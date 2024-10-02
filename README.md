@@ -2,7 +2,6 @@
 Realtime chat v2 (golang and react)
 
 ## To Do
-- display number of users in a room
 - randomly generate short Id for rooms
 - store users and rooms/messages in db
 
