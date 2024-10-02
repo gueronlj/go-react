@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import Card from "./Card";
-import { WEBSOCKET_URL } from "../../configs";
 import { useContext } from "react";
 import { WebSocketContext } from "../WebSocketProvider/webSocketProvider";
 import { Link } from "wouter";
@@ -11,7 +10,7 @@ const RoomList  = ({data}) => {
     const {user} = useContext(UserContext)
 
     const handleJoinRoom = (roomId) => {
-        const ws = new WebSocket(`${WEBSOCKET_URL}/chat/joinRoom/${roomId}?userId=${user.id}&username=${user.name}`)
+        const ws = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/chat/joinRoom/${roomId}?userId=${user.id}&username=${user.name}`)
         if (ws.OPEN) {
             setConnection(ws)
             console.log(`joining room at ${ws.url}`);

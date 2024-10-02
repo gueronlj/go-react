@@ -29,7 +29,7 @@ const ChatRoom = () => {
     const getUsers = async () => {
         try{
             const roomId = await connection?.url?.split('/')[5].split('?')[0]
-            const res = await fetch(`http://localhost:8080/chat/getClients/${roomId}`,{
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${roomId}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             })
