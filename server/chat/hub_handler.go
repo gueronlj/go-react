@@ -61,15 +61,16 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 	username := c.Query("username")
 	cli := &Client{
 		Connection: conn,
-		Message:    make(chan *Message, 10),
+		Message:    make(chan *Message, 25),
 		ID:         cleintID,
 		RoomID:     roomID,
 		Username:   username,
 	}
 	msg := &Message{
-		Content:  "A new user has joined",
-		RoomID:   roomID,
-		Username: username,
+		Content:   username + " has joined",
+		RoomID:    roomID,
+		Username:  username,
+		ServerMsg: true,
 	}
 	//push the client through the join channel
 	h.hub.Join <- cli

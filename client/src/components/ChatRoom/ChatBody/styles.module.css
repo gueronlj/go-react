@@ -34,3 +34,9 @@
     color: whitesmoke;
 }
 
+.serverMsg {
+    color: darkgray;
+    font-style: italic;
+    background: none;
+}
+

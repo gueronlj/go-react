@@ -15,6 +15,7 @@ const ChatRoom = () => {
     const [userCount, setUserCount] = useState(0)
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
+    const [typingUsers, setTypingUsers] = useState([])
 
     const sendMessage = () => {  
         if ( connection == null ) {
@@ -28,7 +29,6 @@ const ChatRoom = () => {
     const getUsers = async () => {
         try{
             const roomId = await connection?.url?.split('/')[5].split('?')[0]
-            console.log(roomId);
             const res = await fetch(`http://localhost:8080/chat/getClients/${roomId}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
@@ -42,7 +42,23 @@ const ChatRoom = () => {
         }
     }
 
-    useEffect (() => {
+    const handleTyping = () => {
+        if (connection) {
+            connection.send(`client_typing`);
+
+            if (!typingUsers.includes(user.name)) {
+                setTypingUsers(prev => [...prev, user.name])
+            }
+            // Remove typing indicator after 3 seconds
+            setTimeout(() => {
+                setTypingUsers(prev => prev.filter(usr => usr !== user.name))
+            }, 5000)
+            return
+            
+        }
+    }
+
+    useEffect(() => {
         connection && getUsers()
     },[messages])
 
@@ -57,7 +73,10 @@ const ChatRoom = () => {
         }
         connection.onmessage = (message) => {
             const msg = JSON.parse(message.data)
-            if (msg.content == 'A new user has joined'){
+            console.log(msg);
+
+
+            if (msg.content == `{${msg.username} has joined`){
                 //decunstruct previous users state and insert new user
                 if(users?.length>0){
                     setUsers([...users, { username: msg.username, id: msg.userId }])
@@ -81,7 +100,7 @@ const ChatRoom = () => {
         }
         connection.onerror = (error) => { console.log("ChatRoom - connection error: " + error)}
         connection.onopen = () => { console.log('ChatRoom - connection open')}
-    },[messages, connection, users, user?.name])
+    },[messages, connection, users, user?.name, typingUsers])
 
     return (
         <div className={styles.chatRoom}>
@@ -95,11 +114,18 @@ const ChatRoom = () => {
             <div className={styles.content}>
                 <ChatBody
                     data={messages}/>
+                
+                <div className={styles.typingIndicator}>
+                    {typingUsers.length > 0 && 
+                        <>{typingUsers.join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing...</>}
+                </div>
+              
             </div>
             
              <div className={styles.footer}>
                 <div className={styles.userInput}>
                     <textarea
+                    onChange={()=>handleTyping()}
                         ref={textarea}/>
                     <button onClick={sendMessage}>Send</button>
                 </div>

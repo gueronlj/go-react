@@ -44,10 +44,11 @@ func (h *Hub) Run() {
 					if len(h.Rooms[cl.RoomID].Clients) != 0 {
 						//send a reference of Message through broadcastg channel
 						h.Broadcast <- &Message{
-							Content:  fmt.Sprintf("%v left the chat", cl.Username),
-							RoomID:   cl.RoomID,
-							Username: cl.Username,
-							UserId:   cl.ID,
+							Content:   fmt.Sprintf("%v left the chat", cl.Username),
+							RoomID:    cl.RoomID,
+							Username:  cl.Username,
+							UserId:    cl.ID,
+							ServerMsg: true,
 						}
 					}
 					//delete client ID from the room in the client's map
@@ -61,9 +62,28 @@ func (h *Hub) Run() {
 		case message := <-h.Broadcast:
 			//if the message's roomID is in the hub's room map
 			if _, exists := h.Rooms[message.RoomID]; exists {
-				//send the message to each client in the room
-				for _, cl := range h.Rooms[message.RoomID].Clients {
-					cl.Message <- message
+				// Check for "typing" message
+				if message.Content == "client_typing" {
+					// Create a new message for "<username> is typing"
+					typingMessage := &Message{
+						Content:   fmt.Sprintf("%s is typing", message.Username),
+						RoomID:    message.RoomID,
+						Username:  message.Username,
+						UserId:    message.UserId,
+						ServerMsg: true,
+					}
+
+					// Send the typing message to all clients in the room except the sender
+					for _, cl := range h.Rooms[message.RoomID].Clients {
+						if cl.ID != message.UserId {
+							cl.Message <- typingMessage
+						}
+					}
+				} else {
+					// For non-typing messages, send to all clients in the room
+					for _, cl := range h.Rooms[message.RoomID].Clients {
+						cl.Message <- message
+					}
 				}
 			}
 		}

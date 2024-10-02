@@ -68,3 +68,7 @@ textarea{
     width: 100%;
 }
 
+.typingIndicator{
+    height: 30px;
+}
+

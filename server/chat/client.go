@@ -15,10 +15,11 @@ type Client struct {
 }
 
 type Message struct {
-	Content  string `json:"content"`
-	RoomID   string `json:"roomId"`
-	Username string `json:"username"`
-	UserId   string `json:"userId"`
+	Content   string `json:"content"`
+	RoomID    string `json:"roomId"`
+	Username  string `json:"username"`
+	UserId    string `json:"userId"`
+	ServerMsg bool   `json:"serverMsg"`
 }
 
 func (c *Client) writeMessage() {
@@ -50,10 +51,11 @@ func (c *Client) readMessage(hub *Hub) {
 		}
 		//send mesg through Hub's broadcast channel
 		msg := &Message{
-			Content:  string(m),
-			RoomID:   c.RoomID,
-			Username: c.Username,
-			UserId:   c.ID,
+			Content:   string(m),
+			RoomID:    c.RoomID,
+			Username:  c.Username,
+			UserId:    c.ID,
+			ServerMsg: false,
 		}
 		hub.Broadcast <- msg
 	}
