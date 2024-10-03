@@ -2,6 +2,7 @@
 Realtime chat v2 (golang and react)
 
 ## To Do
+- disable Send button if input is empty
 - randomly generate short Id for rooms
 - store users and rooms/messages in db
 

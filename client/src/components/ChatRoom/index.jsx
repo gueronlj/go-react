@@ -46,7 +46,6 @@ const ChatRoom = () => {
     const handleTyping = () => {
         if (connection) {
             connection.send(`client_typing`);
-
             if (!typingUsers.includes(user.name)) {
                 setTypingUsers(prev => [...prev, user.name])
             }
@@ -54,8 +53,7 @@ const ChatRoom = () => {
             setTimeout(() => {
                 setTypingUsers(prev => prev.filter(usr => usr !== user.name))
             }, 5000)
-            return
-            
+            return  
         }
     }
 
@@ -80,31 +78,21 @@ const ChatRoom = () => {
             return
         }
         connection.onmessage = (message) => {
-            const msg = JSON.parse(message.data)
+            const msg = JSON.parse(message.data);
             console.log(msg);
 
-
-            if (msg.content == `{${msg.username} has joined`){
-                //decunstruct previous users state and insert new user
-                if(users?.length>0){
-                    setUsers([...users, { username: msg.username, id: msg.userId }])
-                }    
-            }
-            if (msg.content === `{${msg.username} left the chat`){
-                //find matching username and remove from user list
-                const targetUser = users.filter((user) => user.name != msg.username)
-                setUsers([...targetUser])
-                setMessages([...messages, msg])
-                return
-            }
-            if (user?.name == msg.username) {
-                msg.type = 'self'
-                
+            if (msg.serverMsg) {
+                // Handle server messages
+                if (msg.content.includes('has joined')) {
+                    setUsers(prevUsers => [...prevUsers, { username: msg.username, id: msg.userId }]);
+                } else if (msg.content.includes('left the chat')) {
+                    setUsers(prevUsers => prevUsers.filter(user => user.username !== msg.username));
+                }
             } else {
-                msg.type = 'other'
+                // check if message from self
+                user?.name === msg.username ? 'self' : 'other';
             }
-            setMessages([...messages, msg])
-        
+            setMessages(prevMessages => [...prevMessages, msg]);
         }
         connection.onerror = (error) => { console.log("ChatRoom - connection error: " + error)}
         connection.onopen = () => { console.log('ChatRoom - connection open')}

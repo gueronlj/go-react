@@ -26,7 +26,7 @@ const ChatBody = ({ data}) => {
                         <div className={styles.sender+" "+(msg.type=='self'&&styles.selfSender)}>{msg.username}</div>
                     :null}
                     <div className={`${styles.messageContent} ${msg.type === 'self' ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>
-                            <p>{msg.content}</p>
+                        <p>{msg.content}</p>
                     </div>
                 </div>   
             )}
