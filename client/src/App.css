@@ -16,9 +16,8 @@
 
 .lobby{
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding-left:5em;
+  flex-direction: column;
+  padding-left:4em;
   padding-top: 3em;
   align-content: flex-start
 }

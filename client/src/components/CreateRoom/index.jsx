@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "../ui/card"
-import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 
@@ -16,8 +15,9 @@ const CreateRoom = () => {
     }
 
     const handleCreate = async () => {
-        try{
-            let res = await fetch("http://localhost:8080/chat/createRoom",{
+        try {
+            // Use import.meta.env for Vite apps
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/chat/createRoom`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,22 +25,21 @@ const CreateRoom = () => {
                 body: JSON.stringify(input),
             })
             console.log(res);
-        } catch (err){
-            console.log(err);  
-        }  
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return(
         <Card className="w-[250px]">
             <CardHeader>
-                <CardTitle>Create room</CardTitle>
-                <CardDescription>Create a new room</CardDescription>
+                <CardTitle>Create Room</CardTitle>
+                <CardDescription>Make a new chat room</CardDescription>
             </CardHeader>
             <CardContent>
                 <form>
                     <div className="grid w-full items-center gap-4">
                         <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="name">Name</Label>
                         <Input id="name" placeholder="Enter room name" onChange={handleInput}/>
                         </div>
                     </div>

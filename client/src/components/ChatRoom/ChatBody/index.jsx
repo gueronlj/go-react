@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
 import styles from './styles.module.css'
+import { UserContext } from '../../UserProvider/UserProvider'
 
 const ChatBody = ({ data}) => {
     const [messages, setMessages] = useState(data);
+    const { user } = useContext(UserContext);
+
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -23,9 +26,9 @@ const ChatBody = ({ data}) => {
             {messages.map((msg, index) =>  
                 <div key={index} className={`${styles.message}`}>
                     {!msg.serverMsg?
-                        <div className={styles.sender+" "+(msg.type=='self'&&styles.selfSender)}>{msg.username}</div>
+                        <div className={styles.sender+" "+(msg.username === user?.name ? styles.selfSender : '')}>{msg.username}</div>
                     :null}
-                    <div className={`${styles.messageContent} ${msg.type === 'self' ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>
+                    <div className={`${styles.messageContent} ${msg.username === user?.name ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>
                         <p>{msg.content}</p>
                     </div>
                 </div>   

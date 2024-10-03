@@ -2,7 +2,6 @@
 import { useState, useContext } from "react"
 import { UserContext } from "../UserProvider/UserProvider";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "../ui/card";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
@@ -23,15 +22,14 @@ const AliasSelect = () => {
     return (
         <Card className="w-[250px]">
             <CardHeader>
-                <CardTitle>Change Alias</CardTitle>
+                <CardTitle>Alias</CardTitle>
                 <CardDescription>Change your name anytime here</CardDescription>
             </CardHeader>
             <CardContent>
                 <form>
                     <div className="grid w-full items-center gap-4">
                         <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" placeholder="Enter your name" onChange={handleInput}/>
+                            <Input id="name" placeholder="Enter your name" onChange={handleInput}/>
                         </div>
                     </div>
                 </form>

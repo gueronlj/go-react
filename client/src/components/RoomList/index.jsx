@@ -18,11 +18,11 @@ const RoomList  = ({data}) => {
     }
 
     return(
-        <>
+        <div className="flex flex-row flex-wrap gap-4">  
             { data.map((room)=>
                 <RoomCard key={room.id} room={room} handleJoinRoom={handleJoinRoom}/>
             )}
-        </>
+        </div>
     )
 }
 

@@ -43,6 +43,7 @@ function App() {
                 <CreateRoom />
               </SidePanel>
               <div className='lobby'>
+                <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight m-4">Rooms</h3>
                 {roomList.length > 0 ?
                    <RoomList data={roomList}/> : <div>No rooms available</div>}
               </div>

@@ -34,16 +34,15 @@ const buttonVariants = cva(
   }
 )
 
-const Button = 
-  ({ className, variant, size, asChild = false, ...props }) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        {...props}
-      />
-    )
-  }
+const Button = ({ className, variant, size, asChild = false, ...props }) => {
+  const Comp = asChild ? Slot : "button"
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
 
 Button.displayName = "Button"
 

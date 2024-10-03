@@ -6,6 +6,8 @@ import autosize from 'autosize'
 import styles from './styles.module.css'
 import { UserContext } from '../UserProvider/UserProvider'
 import { useLocation } from 'wouter'
+import { Button } from '../ui/button'
+import { cn } from '../../lib/utils'
 
 const ChatRoom = () => {
 
@@ -101,9 +103,9 @@ const ChatRoom = () => {
     return (
         <div className={styles.chatRoom}>
             <div className={styles.header}>
-                <h3>Room ID: {messages[0]?.roomId}</h3>
-                <p>Users in chat: {userCount}</p>
-                <button onClick={handleLeaveBtn}>Back</button>
+                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {messages[0]?.roomId}</h3>
+                <p className="leading-7">Users in chat: {userCount}</p>
+                <Button onClick={handleLeaveBtn}>Back</Button>
             </div>
             
             <div className={styles.content}>
@@ -120,9 +122,13 @@ const ChatRoom = () => {
              <div className={styles.footer}>
                 <div className={styles.userInput}>
                     <textarea
-                    onChange={()=>handleTyping()}
+                        className={cn(
+                            "flex min-h-[40px] w-full rounded-md border border-input px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                            styles.textarea
+                          )}
+                        onChange={()=>handleTyping()}
                         ref={textarea}/>
-                    <button onClick={sendMessage}>Send</button>
+                    <Button onClick={sendMessage}>Send</Button>
                 </div>
             </div>   
             

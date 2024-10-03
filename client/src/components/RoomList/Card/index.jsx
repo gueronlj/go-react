@@ -8,7 +8,7 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
 
     const getUserCount = async () => {
         try {
-            let res = await fetch(`http://localhost:8080/chat/getClients/${room.id}`, {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${room.id}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -28,7 +28,7 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
       },[children])
       
     return(
-        <Card className="w-[250px]">
+        <Card className="w-[150px]">
             <CardHeader>
                 <CardTitle>{room.name}</CardTitle>
                 <CardDescription>ID: {room.id}</CardDescription>
