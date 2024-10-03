@@ -12,13 +12,14 @@ import { cn } from '../../lib/utils'
 const ChatRoom = () => {
 
     const [ messages, setMessages ] = useState([])
-    const [ users, setUsers ] = useState ([])
+    const [ users, setUsers ] = useState([])
     const { user } = useContext(UserContext)
     const [userCount, setUserCount] = useState(0)
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
     const [typingUsers, setTypingUsers] = useState([])
     const [, setLocation] = useLocation()
+    const roomId = useRef(null)
 
     const sendMessage = () => {  
         if ( connection == null ) {
@@ -26,22 +27,23 @@ const ChatRoom = () => {
             return
         }
         connection.send(textarea.current.value)
+        setTypingUsers(prev => prev.filter(usr => usr !== user.name));
         textarea.current.value = ''
     }
 
     const getUsers = async () => {
         try{
-            const roomId = await connection?.url?.split('/')[5].split('?')[0]
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${roomId}`,{
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${roomId.current}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             })
             const data = await res.json()
             console.log("Users in chat: "+JSON.stringify(data));
-            setUsers(data)
-            setUserCount(data.length)           
+            setUsers(data)  
+            setUserCount(data ? data.length : 0)
         } catch(err) {
             console.log(err);  
+            setUserCount(0)
         }
     }
 
@@ -49,13 +51,12 @@ const ChatRoom = () => {
         if (connection) {
             connection.send(`client_typing`);
             if (!typingUsers.includes(user.name)) {
-                setTypingUsers(prev => [...prev, user.name])
+                setTypingUsers(prevTypingUsers => [...prevTypingUsers, user.name]);
             }
-            // Remove typing indicator after 3 seconds
+            // Remove typing indicator after 5 seconds
             setTimeout(() => {
-                setTypingUsers(prev => prev.filter(usr => usr !== user.name))
-            }, 5000)
-            return  
+                setTypingUsers(prev => prev.filter(usr => usr !== user.name));
+            }, 3000);
         }
     }
 
@@ -70,6 +71,12 @@ const ChatRoom = () => {
         connection && getUsers()
     },[messages])
 
+    useEffect(() => {
+        if (connection && connection.url) {
+            roomId.current = connection.url.split('/')[5].split('?')[0]
+        }
+    }, [connection])
+
     useEffect (() => {
         //Handle ws connection stuff
         if ( textarea.current ) {
@@ -81,30 +88,22 @@ const ChatRoom = () => {
         }
         connection.onmessage = (message) => {
             const msg = JSON.parse(message.data);
-            console.log(msg);
-
-            if (msg.serverMsg) {
-                // Handle server messages
-                if (msg.content.includes('has joined')) {
-                    setUsers(prevUsers => [...prevUsers, { username: msg.username, id: msg.userId }]);
-                } else if (msg.content.includes('left the chat')) {
-                    setUsers(prevUsers => prevUsers.filter(user => user.username !== msg.username));
-                }
-            } else {
-                // check if message from self
-                user?.name === msg.username ? 'self' : 'other';
-            }
             setMessages(prevMessages => [...prevMessages, msg]);
+            console.log(msg);
         }
-        connection.onerror = (error) => { console.log("ChatRoom - connection error: " + error)}
-        connection.onopen = () => { console.log('ChatRoom - connection open')}
+        connection.onerror = (error) => { 
+            console.log("ChatRoom - connection error: " + error)
+        }
+        connection.onopen = () => { 
+            console.log('ChatRoom - connection open')
+        }
     },[messages, connection, users, user?.name, typingUsers])
 
     return (
         <div className={styles.chatRoom}>
             <div className={styles.header}>
                 <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {messages[0]?.roomId}</h3>
-                <p className="leading-7">Users in chat: {userCount}</p>
+                <p>Users in chat: {userCount}</p>
                 <Button onClick={handleLeaveBtn}>Back</Button>
             </div>
             
@@ -128,7 +127,7 @@ const ChatRoom = () => {
                           )}
                         onChange={()=>handleTyping()}
                         ref={textarea}/>
-                    <Button onClick={sendMessage}>Send</Button>
+                    <Button onClick={sendMessage} disabled={!textarea.current?.value}>Send</Button>
                 </div>
             </div>   
             

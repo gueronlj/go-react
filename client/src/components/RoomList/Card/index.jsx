@@ -28,7 +28,7 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
       },[children])
       
     return(
-        <Card className="w-[150px]">
+        <Card className="w-[200px]">
             <CardHeader>
                 <CardTitle>{room.name}</CardTitle>
                 <CardDescription>ID: {room.id}</CardDescription>
