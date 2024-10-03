@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
-import styles from './styles.module.css';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "../../ui/card";
+import { Link } from "wouter";
 
-const Card = ({room, children}) => {
+const RoomCard = ({room, children, handleJoinRoom}) => {
     const [userCount, setUserCount] = useState(0)
 
     const getUserCount = async () => {
@@ -27,12 +28,23 @@ const Card = ({room, children}) => {
       },[children])
       
     return(
-        <div className={styles.card}>
-            <h3>{room.name}</h3>
-            <p>{userCount}</p>
-            {children}
-        </div>
+        <Card className="w-[250px]">
+            <CardHeader>
+                <CardTitle>{room.name}</CardTitle>
+                <CardDescription>ID: {room.id}</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p>Users: {userCount}</p>
+            </CardContent>
+            <CardFooter className="flex justify-center">
+                <Link 
+                    href="/chatroom"
+                    onClick={() => handleJoinRoom(room.id)}>
+                    Join
+                </Link>
+            </CardFooter>
+        </Card>
     )
 }
 
-export default Card
+export default RoomCard

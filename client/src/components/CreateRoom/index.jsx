@@ -1,5 +1,8 @@
 import { useState } from "react"
-import styles from './styles.module.css'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "../ui/card"
+import { Label } from "../ui/label"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
 
 const CreateRoom = () => {
     const [input, setInput] = useState()
@@ -28,13 +31,25 @@ const CreateRoom = () => {
     }
 
     return(
-        <div className={styles.sideMenuForm}>
-            <form>
-                <label name="room">Room Name: </label>
-                <input name = "room" onChange={handleInput}/>
-                <button onClick={handleCreate}>Create Room</button>
-            </form> 
-        </div>
+        <Card className="w-[250px]">
+            <CardHeader>
+                <CardTitle>Create room</CardTitle>
+                <CardDescription>Create a new room</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form>
+                    <div className="grid w-full items-center gap-4">
+                        <div className="flex flex-col space-y-1.5">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" placeholder="Enter room name" onChange={handleInput}/>
+                        </div>
+                    </div>
+                </form>
+            </CardContent>
+            <CardFooter className="flex justify-center">
+                <Button onClick={handleCreate}>Submit</Button>
+            </CardFooter>
+        </Card>
     )
 }
 

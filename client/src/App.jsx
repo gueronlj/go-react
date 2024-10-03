@@ -43,8 +43,8 @@ function App() {
                 <CreateRoom />
               </SidePanel>
               <div className='lobby'>
-                <RoomList
-                  data={roomList}/>
+                {roomList.length > 0 ?
+                   <RoomList data={roomList}/> : <div>No rooms available</div>}
               </div>
             </div>
           </Route> 

@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
-import Card from "./Card";
 import { useContext } from "react";
 import { WebSocketContext } from "../WebSocketProvider/webSocketProvider";
-import { Link } from "wouter";
 import { UserContext } from "../UserProvider/UserProvider";
+import RoomCard from "./Card";
 
 const RoomList  = ({data}) => {
     const {setConnection} = useContext(WebSocketContext)
@@ -21,13 +20,7 @@ const RoomList  = ({data}) => {
     return(
         <>
             { data.map((room)=>
-                <Card key={room.id} room={room}>
-                    <Link 
-                        href="/chatroom"
-                        onClick={() => handleJoinRoom(room.id)}>
-                        Join
-                    </Link>
-                </Card>
+                <RoomCard key={room.id} room={room} handleJoinRoom={handleJoinRoom}/>
             )}
         </>
     )
