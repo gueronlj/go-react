@@ -34,6 +34,8 @@ func main() {
 		db.GetRooms(c)
 	})
 	r.GET("/chat/getClients/:roomId", wsHandler.GetClients)
-
+	r.GET("/chat/getMessages/:roomId", func(c *gin.Context) {
+		db.GetMessages(c)
+	})
 	r.Run("localhost:8080")
 }

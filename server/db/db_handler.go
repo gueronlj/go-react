@@ -57,6 +57,29 @@ func StoreMessage(message Message) (Message, error) {
 	return message, nil
 }
 
+func GetMessages(c *gin.Context) ([]Message, error) {
+	db := GetDB()
+	roomID := c.Param("roomId")
+	rows, err := db.Query("SELECT id, content, username, room_id FROM messages WHERE room_id = $1;", roomID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var messages []Message
+	for rows.Next() {
+		var msg Message
+		if err := rows.Scan(&msg.ID, &msg.Content, &msg.Username, &msg.Room_Id); err != nil {
+			return nil, err
+		}
+		messages = append(messages, msg)
+	}
+	if c != nil {
+		c.JSON(http.StatusOK, messages)
+	}
+	return messages, nil
+}
+
 func GetRooms(c *gin.Context) ([]Room, error) {
 	db := GetDB()
 	rows, err := db.Query("SELECT * FROM rooms;")

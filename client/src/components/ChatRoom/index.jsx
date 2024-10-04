@@ -8,6 +8,8 @@ import { UserContext } from '../UserProvider/UserProvider'
 import { useLocation } from 'wouter'
 import { Button } from '../ui/button'
 import { cn } from '../../lib/utils'
+import { debounce } from 'lodash'
+import { useQuery } from '@tanstack/react-query'
 
 const ChatRoom = () => {
 
@@ -20,6 +22,21 @@ const ChatRoom = () => {
     const [typingUsers, setTypingUsers] = useState([])
     const [, setLocation] = useLocation()
     const roomId = useRef(null)
+    const lastTypingTime = useRef(0)
+
+    const { isPending, error, data } = useQuery({
+        queryKey: ['getMessages'],
+        queryFn: () =>
+            fetch(`${import.meta.env.VITE_API_URL}/chat/getMessages/${roomId.current}`)
+            .then((res) => res.json()),
+    })
+
+    // Use useEffect to update messages when data is available
+    useEffect(() => {
+        if (data) {
+            setMessages(data);
+        }
+    }, [data]);
 
     const sendMessage = () => {  
         if ( connection == null ) {
@@ -34,16 +51,13 @@ const ChatRoom = () => {
     const getUsers = async () => {
         try{
             if (connection && connection.url) {
-           
                 roomId.current = connection.url.split('/')[5].split('?')[0]
-                console.log(roomId.current);
             }
             const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${roomId.current}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             })
             const data = await res.json()
-            console.log("Users in chat: "+JSON.stringify(data));
             setUsers(data)  
             setUserCount(data ? data.length : 0)
         } catch(err) {
@@ -52,16 +66,25 @@ const ChatRoom = () => {
         }
     }
 
+    const debouncedSendTyping = debounce(() => {
+        const now = Date.now()
+        if (now - lastTypingTime.current > 5000) {
+            connection.send(`client_typing`)
+            lastTypingTime.current = now
+        }
+    }, 1000)
+
     const handleTyping = () => {
         if (connection) {
-            connection.send(`client_typing`);
+            //Even though a user's typing state is emitted from server, we can put our own in memory for smoother feel
             if (!typingUsers.includes(user.name)) {
                 setTypingUsers(prevTypingUsers => [...prevTypingUsers, user.name]);
             }
-            // Remove typing indicator after 5 seconds
+            debouncedSendTyping()
+            //Remove typing indicator after 5 seconds
             setTimeout(() => {
                 setTypingUsers(prev => prev.filter(usr => usr !== user.name));
-            }, 3000);
+            }, 5000);
         }
     }
 
@@ -76,7 +99,6 @@ const ChatRoom = () => {
         connection && getUsers()
     },[messages, connection])
 
-
     useEffect (() => {
         //Handle ws connection stuff
         if ( textarea.current ) {
@@ -88,6 +110,14 @@ const ChatRoom = () => {
         }
         connection.onmessage = (message) => {
             const msg = JSON.parse(message.data);
+            if (msg.content.endsWith("is typing")) {
+                setTypingUsers(prevTypingUsers => {
+                    if (!prevTypingUsers.includes(msg.username)) {
+                        return [...prevTypingUsers, msg.username];
+                    }
+                    return prevTypingUsers;
+                });
+            }
             setMessages(prevMessages => [...prevMessages, msg]);
             console.log(msg);
         }
@@ -108,8 +138,10 @@ const ChatRoom = () => {
             </div>
             
             <div className={styles.content}>
-                <ChatBody
-                    data={messages}/>
+                {error && <p>There was a problem fetching messages</p>}
+                {isPending? <p>Loading...</p>
+                :
+                <ChatBody data={messages}/>}
                 
                 <div className={styles.typingIndicator}>
                     {typingUsers.length > 0 && 
