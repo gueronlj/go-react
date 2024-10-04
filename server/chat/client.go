@@ -9,16 +9,16 @@ import (
 type Client struct {
 	Connection *websocket.Conn
 	Message    chan *Message
-	ID         string `json:"id"`
-	RoomID     string `json:"roomId"`
+	ID         int    `json:"id"`
+	RoomID     int    `json:"roomId"`
 	Username   string `json:"username"`
 }
 
 type Message struct {
 	Content   string `json:"content"`
-	RoomID    string `json:"roomId"`
+	RoomID    int    `json:"roomId"`
 	Username  string `json:"username"`
-	UserId    string `json:"userId"`
+	UserId    int    `json:"userId"`
 	ServerMsg bool   `json:"serverMsg"`
 }
 

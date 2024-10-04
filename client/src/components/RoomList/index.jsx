@@ -42,7 +42,7 @@ const RoomList  = () => {
     {roomList.length > 0 ? 
         <div className="flex flex-row flex-wrap gap-4">  
             { roomList.map((room)=>
-                <RoomCard key={room.id} room={room} handleJoinRoom={handleJoinRoom}/>
+                <RoomCard key={room.ID} room={room} handleJoinRoom={handleJoinRoom}/>
             )}
         </div>
     :

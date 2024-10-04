@@ -2,9 +2,11 @@ package chat
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/gueronlj/go+react/db"
 )
 
 type Handler struct {
@@ -18,7 +20,7 @@ func NewHandler(h *Hub) *Handler {
 }
 
 type CreateRoomReq struct {
-	ID   string `jsonL:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -28,11 +30,26 @@ func (h *Handler) CreateRoom(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	h.hub.Rooms[req.ID] = &Room{
+
+	// Create a new Room object
+	newRoom := &Room{
 		ID:      req.ID,
 		Name:    req.Name,
-		Clients: make(map[string]*Client),
+		Clients: make(map[int]*Client),
 	}
+	// Store the new Room in the database
+	dbRoom := db.Room{
+		ID:   newRoom.ID,
+		Name: newRoom.Name,
+	}
+	_, err := db.CreateRoom(dbRoom)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create room in database"})
+		return
+	}
+	// Add the new Room to the hub's Rooms map
+	h.hub.Rooms[req.ID] = newRoom
+	// Respond to the client with the created room
 	c.JSON(http.StatusOK, req)
 }
 
@@ -56,13 +73,24 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	roomID := c.Param("roomId")
-	cleintID := c.Query("userId")
+	roomIDStr := c.Param("roomId")
+	roomID, err := strconv.Atoi(roomIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	clientIDStr := c.Query(("userId"))
+	clientID, err := strconv.Atoi(clientIDStr)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid room ID"})
+		return
+	}
 	username := c.Query("username")
 	cli := &Client{
 		Connection: conn,
 		Message:    make(chan *Message, 25),
-		ID:         cleintID,
+		ID:         clientID,
 		RoomID:     roomID,
 		Username:   username,
 	}
@@ -83,7 +111,7 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 
 // we will need to return json
 type RoomResponse struct {
-	ID   string `json:"id"`
+	ID   int    `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -107,15 +135,23 @@ type ClientResponse struct {
 // get all clients from a room by ID
 func (h *Handler) GetClients(c *gin.Context) {
 	var clients []ClientResponse
-	roomId := c.Param("roomId")
+	roomIdStr := c.Param("roomId")
+	roomId, err := strconv.Atoi(roomIdStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid room ID"})
+		return
+	}
+
 	if _, ok := h.hub.Rooms[roomId]; !ok {
-		//if not ok (roomId is not in rooms) then create and return an empty slice, size 0
+		// If not ok (roomId is not in rooms) then create and return an empty slice, size 0
 		clients = make([]ClientResponse, 0)
 		c.JSON(http.StatusOK, clients)
+		return
 	}
+
 	for _, client := range h.hub.Rooms[roomId].Clients {
 		clients = append(clients, ClientResponse{
-			ID:       client.ID,
+			ID:       strconv.Itoa(client.ID), // Convert int to string
 			Username: client.Username,
 		})
 	}

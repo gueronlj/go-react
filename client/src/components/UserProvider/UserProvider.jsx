@@ -5,7 +5,7 @@ export const UserContext = createContext(null)
 
 const CurrentUserProvider = ({children}) => {
 
-    const [user, setUser] = useState({id:"random", name:"guest"})
+    const [user, setUser] = useState({id:707, name:"guest"})
     return (
         <UserContext.Provider
             value={{user, setUser}}>

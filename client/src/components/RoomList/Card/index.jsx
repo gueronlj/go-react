@@ -8,7 +8,7 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
 
     const getUserCount = async () => {
         try {
-            let res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${room.id}`, {
+            let res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${room.ID}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -30,8 +30,8 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
     return(
         <Card className="w-[200px]">
             <CardHeader>
-                <CardTitle>{room.name}</CardTitle>
-                <CardDescription>ID: {room.id}</CardDescription>
+                <CardTitle>{room.Name}</CardTitle>
+                <CardDescription>ID: {room.ID}</CardDescription>
             </CardHeader>
             <CardContent>
                 <p>Users: {userCount}</p>
@@ -39,7 +39,7 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
             <CardFooter className="flex justify-center">
                 <Link 
                     href="/chatroom"
-                    onClick={() => handleJoinRoom(room.id)}>
+                    onClick={() => handleJoinRoom(room.ID)}>
                     Join
                 </Link>
             </CardFooter>

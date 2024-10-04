@@ -33,6 +33,11 @@ const ChatRoom = () => {
 
     const getUsers = async () => {
         try{
+            if (connection && connection.url) {
+           
+                roomId.current = connection.url.split('/')[5].split('?')[0]
+                console.log(roomId.current);
+            }
             const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${roomId.current}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
@@ -69,13 +74,8 @@ const ChatRoom = () => {
 
     useEffect(() => {
         connection && getUsers()
-    },[messages])
+    },[messages, connection])
 
-    useEffect(() => {
-        if (connection && connection.url) {
-            roomId.current = connection.url.split('/')[5].split('?')[0]
-        }
-    }, [connection])
 
     useEffect (() => {
         //Handle ws connection stuff

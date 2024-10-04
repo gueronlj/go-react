@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/gueronlj/go+react/chat"
+	"github.com/gueronlj/go+react/db"
 )
 
 var r *gin.Engine
@@ -29,7 +30,9 @@ func main() {
 
 	r.POST("/chat/createRoom", wsHandler.CreateRoom)
 	r.GET("/chat/joinRoom/:roomId", wsHandler.JoinRoom)
-	r.GET("/chat/getRooms/", wsHandler.GetRooms)
+	r.GET("/chat/getRooms/", func(c *gin.Context) {
+		db.GetRooms(c)
+	})
 	r.GET("/chat/getClients/:roomId", wsHandler.GetClients)
 
 	r.Run("localhost:8080")

@@ -16,7 +16,7 @@ const AliasSelect = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-     setUser({id: 'random', name: name })
+     setUser({id: 707, name: name })
     }
 
     return (
