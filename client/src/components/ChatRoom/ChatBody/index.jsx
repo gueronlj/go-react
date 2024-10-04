@@ -15,8 +15,9 @@ const ChatBody = ({ data}) => {
 
     useEffect(() => {
         // Filter out "is typing" messages
-        const filteredMessages = data.filter(msg => !msg.content.endsWith('is typing'));
+        const filteredMessages = data.filter(msg => !msg?.content?.endsWith('is typing'));
         setMessages(filteredMessages);
+        console.log(messages);
     }, [data]);
 
     useEffect(() => {
@@ -28,10 +29,10 @@ const ChatBody = ({ data}) => {
             {messages.map((msg, index) =>  
                 <div key={index} className={`${styles.message}`}>
                     {!msg.serverMsg?
-                        <div className={styles.sender+" "+(msg.username === user?.name ? styles.selfSender : '')}>{msg.username}</div>
+                        <div className={styles.sender+" "+(msg.Username === user?.name ? styles.selfSender : '')}>{msg.Username}</div>
                     :null}
-                    <div className={`${styles.messageContent} ${msg.username === user?.name ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>
-                        <p>{msg.content}</p>
+                    <div className={`${styles.messageContent} ${msg.Username === user?.name ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>
+                        <p>{msg.Content}</p>
                     </div>
                 </div>   
             )}

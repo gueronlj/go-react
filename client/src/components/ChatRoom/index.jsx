@@ -132,7 +132,7 @@ const ChatRoom = () => {
     return (
         <div className={styles.chatRoom}>
             <div className={styles.header}>
-                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {messages[0]?.roomId}</h3>
+                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {messages[0]?.Room_Id}</h3>
                 <p>Users in chat: {userCount}</p>
                 <Button onClick={handleLeaveBtn}>Back</Button>
             </div>

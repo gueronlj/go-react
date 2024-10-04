@@ -26,13 +26,14 @@
 .header{
     box-sizing: border-box;
     padding: 1em;
-    background-color: rgb(96, 107, 107);
+    background-color: rgb(53, 55, 71);
     position: fixed;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    color: aliceblue;
 }
 
 .header h3 {
@@ -57,7 +58,7 @@
 
 .footer{
     box-sizing: border-box;
-    background-color: rgb(96, 107, 107);
+    background-color: rgb(53, 55, 71);
     padding: 2em;
     position: fixed;
     bottom: 0;
