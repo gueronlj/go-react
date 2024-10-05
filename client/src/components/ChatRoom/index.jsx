@@ -31,12 +31,14 @@ const ChatRoom = () => {
             .then((res) => res.json()),
     })
 
-    // Use useEffect to update messages when data is available
+    // Fetch messages only once on component mount
     useEffect(() => {
-        if (data) {
-            setMessages(data);
-        }
-    }, [data]);
+        const fetchMessages = async () => {
+            await data; // Ensure data is fetched
+            setMessages(data)
+        };
+        fetchMessages();
+    }, []); // Empty dependency array to run only once
 
     const sendMessage = () => {  
         if ( connection == null ) {
