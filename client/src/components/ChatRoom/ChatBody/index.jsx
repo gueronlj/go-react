@@ -15,7 +15,7 @@ const ChatBody = ({ data}) => {
 
     useEffect(() => {
         // Filter out "is typing" messages
-        const filteredMessages = data.filter(msg => !msg?.content?.endsWith('is typing'));
+        const filteredMessages = data.filter(msg => !msg?.Content?.endsWith('is typing'));
         setMessages(filteredMessages);
         console.log(messages);
     }, [data]);
