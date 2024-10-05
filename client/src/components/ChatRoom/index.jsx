@@ -110,7 +110,7 @@ const ChatRoom = () => {
         }
         connection.onmessage = (message) => {
             const msg = JSON.parse(message.data);
-            if (msg.content.endsWith("is typing")) {
+            if (msg.Content.endsWith("is typing")) {
                 setTypingUsers(prevTypingUsers => {
                     if (!prevTypingUsers.includes(msg.username)) {
                         return [...prevTypingUsers, msg.username];

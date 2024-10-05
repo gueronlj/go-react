@@ -15,11 +15,11 @@ type Client struct {
 }
 
 type Message struct {
-	Content   string `json:"content"`
-	RoomID    int    `json:"roomId"`
-	Username  string `json:"username"`
-	UserId    int    `json:"userId"`
-	ServerMsg bool   `json:"serverMsg"`
+	Content   string `json:"Content"`
+	RoomID    int    `json:"RoomId"`
+	Username  string `json:"Username"`
+	UserId    int    `json:"UserId"`
+	ServerMsg bool   `json:"ServerMsg"`
 }
 
 func (c *Client) writeMessage() {
