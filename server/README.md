@@ -2,7 +2,7 @@
 Realtime chat v2 (golang and react)
 
 ## To Do
-- randomly generate short Id for rooms
+
 - store users and rooms/messages in db
 
 ## Server Setup

@@ -102,20 +102,19 @@ func (h *Hub) Run() {
 					// For non-typing messages, send to all clients in the room
 					for _, cl := range h.Rooms[message.RoomID].Clients {
 						// Only store non-join and non-leave messages
-						if !isJoinOrLeaveMessage(message.Content, message.Username) {
-							go func() {
-								dbMessage := db.Message{
-									Content:  message.Content,
-									Username: message.Username,
-									Room_Id:  message.RoomID,
-									ID:       rand.Intn(100000), // Generate a random integer between 0 and 99999
-								}
-								_, err := db.StoreMessage(dbMessage)
-								if err != nil {
-									fmt.Printf("Error storing message: %v\n", err)
-								}
-							}()
-						}
+						go func() {
+							dbMessage := db.Message{
+								Content:  message.Content,
+								Username: message.Username,
+								Room_Id:  message.RoomID,
+								ID:       rand.Intn(100000), // Generate a random integer between 0 and 99999
+							}
+							_, err := db.StoreMessage(dbMessage)
+							if err != nil {
+								fmt.Printf("Error storing message: %v\n", err)
+							}
+						}()
+
 						cl.Message <- message
 					}
 				}
@@ -124,7 +123,7 @@ func (h *Hub) Run() {
 	}
 }
 
-func isJoinOrLeaveMessage(content, username string) bool {
-	return content == fmt.Sprintf("%s has joined", username) ||
-		content == fmt.Sprintf("%s has left the chat", username)
-}
+// func isJoinOrLeaveMessage(content, username string) bool {
+// 	return content == fmt.Sprintf("%s has joined", username) ||
+// 		content == fmt.Sprintf("%s has left the chat", username)
+// }
