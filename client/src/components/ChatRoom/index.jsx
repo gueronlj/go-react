@@ -21,24 +21,24 @@ const ChatRoom = () => {
     const { connection } = useContext(WebSocketContext)
     const [typingUsers, setTypingUsers] = useState([])
     const [, setLocation] = useLocation()
-    const roomId = useRef(null)
     const lastTypingTime = useRef(0)
 
     const { isPending, error, data } = useQuery({
-        queryKey: ['getMessages'],
+        queryKey: ['getOldMessages'],
         queryFn: () =>
-            fetch(`${import.meta.env.VITE_API_URL}/chat/getMessages/${roomId.current}`)
+            fetch(`${import.meta.env.VITE_API_URL}/chat/getMessages/${connection.url.split('/')[5].split('?')[0]}`)
             .then((res) => res.json()),
     })
 
     // Fetch messages only once on component mount
-    useEffect(() => {
-        const fetchMessages = async () => {
-            await data; // Ensure data is fetched
-            setMessages(data)
-        };
-        fetchMessages();
-    }, []); // Empty dependency array to run only once
+    // useEffect(() => {
+    //     const fetchMessages = async () => {
+    //         await data; // Ensure data is fetched
+    //         console.log(data);
+    //         setMessages(data)
+    //     };
+    //     fetchMessages();
+    // }, []); // Empty dependency array to run only once
 
     const sendMessage = () => {  
         if ( connection == null ) {
@@ -52,10 +52,10 @@ const ChatRoom = () => {
 
     const getUsers = async () => {
         try{
-            if (connection && connection.url) {
-                roomId.current = connection.url.split('/')[5].split('?')[0]
-            }
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${roomId.current}`,{
+            // if (connection && connection.url) {
+            //     roomId.current = connection.url.split('/')[5].split('?')[0]
+            // }
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${user.curentRoomId}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -121,7 +121,6 @@ const ChatRoom = () => {
                 });
             }
             setMessages(prevMessages => [...prevMessages, msg]);
-            console.log(msg);
         }
         connection.onerror = (error) => { 
             console.log("ChatRoom - connection error: " + error)
@@ -129,13 +128,13 @@ const ChatRoom = () => {
         connection.onopen = () => { 
             console.log('ChatRoom - connection open')
         }
-    },[messages, connection, users, user?.name, typingUsers])
+    },[messages, connection, users, typingUsers])
 
     return (
         <div className={styles.chatRoom}>
             <div className={styles.header}>
                 { isPending? <p>?</p> 
-                    :<h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {roomId.current}</h3>}
+                    :<h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {user.curentRoomId}</h3>}
                 <p>Users in chat: {userCount}</p>
                 <Button onClick={handleLeaveBtn}>Back</Button>
             </div>

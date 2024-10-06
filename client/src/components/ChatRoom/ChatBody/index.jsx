@@ -28,7 +28,7 @@ const ChatBody = ({ data}) => {
         <div className={styles.chatBody}>
             {messages.map((msg, index) =>  
                 <div key={index} className={`${styles.message}`}>
-                    {!msg.serverMsg?
+                    {!msg.ServerMsg?
                         <div className={styles.sender+" "+(msg.Username === user?.name ? styles.selfSender : '')}>{msg.Username}</div>
                     :null}
                     <div className={`${styles.messageContent} ${msg.Username === user?.name ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>

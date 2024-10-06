@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { UserContext } from "../../UserProvider/UserProvider";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter} from "../../ui/card";
 import { Link } from "wouter";
+import { WebSocketContext } from '../../WebSocketProvider/webSocketProvider';
 
-const RoomCard = ({room, children, handleJoinRoom}) => {
+const RoomCard = ({room, children}) => {
+    const {setConnection} = useContext(WebSocketContext)
     const [userCount, setUserCount] = useState(0)
+    const { user, setUser } = useContext(UserContext)
 
     const getUserCount = async () => {
         try {
@@ -20,6 +24,16 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
             )
         } catch (e) {
             console.log(e.message);
+        }
+    }
+
+    const handleJoinRoom = () => {
+        const ws = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/chat/joinRoom/${room.ID}?userId=${user.id}&username=${user.name}`)
+        if (ws.OPEN) {
+        setConnection(ws)
+        setUser(prevUser => ({ ...prevUser, curentRoomId: room.ID }))
+        console.log(`joining room at ${ws.url}`);
+        return
         }
     }
 
@@ -39,7 +53,7 @@ const RoomCard = ({room, children, handleJoinRoom}) => {
             <CardFooter className="flex justify-center">
                 <Link 
                     href="/chatroom"
-                    onClick={() => handleJoinRoom(room.ID)}>
+                    onClick={() => handleJoinRoom()}>
                     Join
                 </Link>
             </CardFooter>

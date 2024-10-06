@@ -99,9 +99,9 @@ func (h *Hub) Run() {
 						cl.Message <- typingMessage
 					}
 				} else {
-					// For non-typing messages, send to all clients in the room
-					for _, cl := range h.Rooms[message.RoomID].Clients {
-						// Only store non-join and non-leave messages
+					// Only store non-join and non-leave messages
+					if !isJoinOrLeaveMessage(message.Content, message.Username) {
+						fmt.Println("storing message!") // Check if the message is not a join or leave message
 						go func() {
 							dbMessage := db.Message{
 								Content:  message.Content,
@@ -114,7 +114,9 @@ func (h *Hub) Run() {
 								fmt.Printf("Error storing message: %v\n", err)
 							}
 						}()
-
+					}
+					// For non-typing messages, send to all clients in the room
+					for _, cl := range h.Rooms[message.RoomID].Clients {
 						cl.Message <- message
 					}
 				}
@@ -123,7 +125,10 @@ func (h *Hub) Run() {
 	}
 }
 
-// func isJoinOrLeaveMessage(content, username string) bool {
-// 	return content == fmt.Sprintf("%s has joined", username) ||
-// 		content == fmt.Sprintf("%s has left the chat", username)
-// }
+func isJoinOrLeaveMessage(content, username string) bool {
+	if content == fmt.Sprintf("%s has joined", username) || content == fmt.Sprintf("%s has left the chat", username) {
+		return true
+	} else {
+		return false
+	}
+}
