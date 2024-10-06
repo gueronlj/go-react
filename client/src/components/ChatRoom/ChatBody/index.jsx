@@ -31,7 +31,7 @@ const ChatBody = ({ data}) => {
                     {!msg.ServerMsg?
                         <div className={styles.sender+" "+(msg.Username === user?.name ? styles.selfSender : '')}>{msg.Username}</div>
                     :null}
-                    <div className={`${styles.messageContent} ${msg.Username === user?.name ? styles.self : ''} ${msg.serverMsg? styles.serverMsg : ''}`}>
+                    <div className={`${styles.messageContent} ${msg.Username === user?.name ? styles.self : ''} ${msg.ServerMsg? styles.serverMsg : ''}`}>
                         <p>{msg.Content}</p>
                     </div>
                 </div>   

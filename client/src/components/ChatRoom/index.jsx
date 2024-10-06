@@ -30,16 +30,6 @@ const ChatRoom = () => {
             .then((res) => res.json()),
     })
 
-    // Fetch messages only once on component mount
-    // useEffect(() => {
-    //     const fetchMessages = async () => {
-    //         await data; // Ensure data is fetched
-    //         console.log(data);
-    //         setMessages(data)
-    //     };
-    //     fetchMessages();
-    // }, []); // Empty dependency array to run only once
-
     const sendMessage = () => {  
         if ( connection == null ) {
             console.log("ChatRoom - Failed to send, no connection");
@@ -52,10 +42,7 @@ const ChatRoom = () => {
 
     const getUsers = async () => {
         try{
-            // if (connection && connection.url) {
-            //     roomId.current = connection.url.split('/')[5].split('?')[0]
-            // }
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${user.curentRoomId}`,{
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/chat/getClients/${connection?.url.split('/')[5].split('?')[0]}`,{
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             })

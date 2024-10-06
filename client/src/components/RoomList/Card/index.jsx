@@ -30,10 +30,10 @@ const RoomCard = ({room, children}) => {
     const handleJoinRoom = () => {
         const ws = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/chat/joinRoom/${room.ID}?userId=${user.id}&username=${user.name}`)
         if (ws.OPEN) {
-        setConnection(ws)
-        setUser(prevUser => ({ ...prevUser, curentRoomId: room.ID }))
-        console.log(`joining room at ${ws.url}`);
-        return
+            setConnection(ws)
+            setUser(prevUser => ({ ...prevUser, curentRoomId: room.ID }))
+            console.log(`joining room at ${ws.url}`);
+            return
         }
     }
 

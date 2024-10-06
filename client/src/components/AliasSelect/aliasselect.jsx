@@ -16,7 +16,7 @@ const AliasSelect = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-     setUser({id: 707, name: name, currentRoomId: 0 })
+        setUser({id: 707, name: name, currentRoomId: 0 })
     }
 
     return (
