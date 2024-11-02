@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import {useState, createContext} from 'react'
+import {useState, createContext, useEffect} from 'react'
 
 export const WebSocketContext = createContext({
     connection: WebSocket || null,
@@ -7,6 +7,18 @@ export const WebSocketContext = createContext({
 })
 
 const WebSocketProvider = ({children}) => {
+    useEffect(() => {
+        // Initialize WebSocket connection here
+        const ws = new WebSocket('wss://your-websocket-server.com');
+        setConnection(ws);
+
+        return () => {
+            // Clean up WebSocket connection when component unmounts
+            if (ws) {
+                ws.close();
+            }
+        };
+    }, []);
 
     const [connection, setConnection] = useState(null)
     return (

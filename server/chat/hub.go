@@ -126,7 +126,7 @@ func (h *Hub) Run() {
 }
 
 func isJoinOrLeaveMessage(content, username string) bool {
-	if content == fmt.Sprintf("%s has joined", username) || content == fmt.Sprintf("%s has left the chat", username) {
+	if content == fmt.Sprintf("%s has joined", username) || content == fmt.Sprintf("%s left the chat", username) {
 		return true
 	} else {
 		return false

@@ -16,8 +16,12 @@ const AliasSelect = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setUser({id: 707, name: name, currentRoomId: 0 })
+        setUser({id: randomId(), name: name, currentRoomId: 0 })
     }
+
+    const randomId = () => {
+        return Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
+    };
 
     return (
         <Card className="w-[250px]">

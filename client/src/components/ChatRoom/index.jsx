@@ -14,9 +14,9 @@ import { useQuery } from '@tanstack/react-query'
 const ChatRoom = () => {
 
     const [ messages, setMessages ] = useState([])
+
     const [ users, setUsers ] = useState([])
     const { user } = useContext(UserContext)
-    const [userCount, setUserCount] = useState(0)
     const textarea = useRef(null)
     const { connection } = useContext(WebSocketContext)
     const [typingUsers, setTypingUsers] = useState([])
@@ -29,6 +29,11 @@ const ChatRoom = () => {
             fetch(`${import.meta.env.VITE_API_URL}/chat/getMessages/${connection.url.split('/')[5].split('?')[0]}`)
             .then((res) => res.json()),
     })
+
+    useEffect(() => {
+        console.log(data);
+        setMessages(data || [])
+    },[])
 
     const sendMessage = () => {  
         if ( connection == null ) {
@@ -48,10 +53,10 @@ const ChatRoom = () => {
             })
             const data = await res.json()
             setUsers(data)  
-            setUserCount(data ? data.length : 0)
+            // setUserCount(data ? data.length : 0)
         } catch(err) {
             console.log(err);  
-            setUserCount(0)
+            // setUserCount(0)
         }
     }
 
@@ -81,6 +86,7 @@ const ChatRoom = () => {
         if (connection) {
             connection.close()
         }
+        setMessages([])
         setLocation('/')
     }
 
@@ -115,14 +121,14 @@ const ChatRoom = () => {
         connection.onopen = () => { 
             console.log('ChatRoom - connection open')
         }
-    },[messages, connection, users, typingUsers])
+    },[messages])
 
     return (
         <div className={styles.chatRoom}>
             <div className={styles.header}>
                 { isPending? <p>?</p> 
                     :<h3 className="scroll-m-20 text-xl font-semibold tracking-tight">ID: {user.curentRoomId}</h3>}
-                <p>Users in chat: {userCount}</p>
+                <p>Users in chat: {users?.length}</p>
                 <Button onClick={handleLeaveBtn}>Back</Button>
             </div>
             
